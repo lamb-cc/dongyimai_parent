@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--扫描属性文件,此处不能加，因为DAO层有了，原因未知-->
+
+    <!--1.配置Jedis的连接池-->
+    <!--<bean class="redis.clients.jedis.JedisPoolConfig" id="jedisPoolConfig">
+        &lt;!&ndash;最大空闲连接数&ndash;&gt;
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        &lt;!&ndash;最大等待时间&ndash;&gt;
+        <property name="maxWaitMillis" value="${redis.maxWait}"/>
+        &lt;!&ndash;测试连接&ndash;&gt;
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+    </bean>-->
+    <bean class="redis.clients.jedis.JedisPoolConfig" id="jedisPoolConfig">
+        <!--最大空闲连接数-->
+        <property name="maxIdle" value="300"/>
+        <!--最大等待时间-->
+        <property name="maxWaitMillis" value="3000"/>
+        <!--测试连接-->
+        <property name="testOnBorrow" value="true"/>
+    </bean>
+
+    <!--2.配置Jedis连接工厂-->
+    <!--<bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" id="connectionFactory">
+        <property name="hostName" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="database" value="${redis.database}"/>
+
+        <property name="poolConfig" ref="jedisPoolConfig"/>
+    </bean>-->
+    <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" id="connectionFactory">
+        <property name="hostName" value="192.168.188.128"/>
+        <property name="port" value="6379"/>
+        <property name="database" value="0"/>
+
+        <property name="poolConfig" ref="jedisPoolConfig"/>
+    </bean>
+
+    <!--3.声明RedisTemplate-->
+    <bean class="org.springframework.data.redis.core.RedisTemplate" id="redisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+
+
+</beans>

@@ -1,0 +1,89 @@
+package com.offcn.shop.controller;
+
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.offcn.entity.PageResult;
+import com.offcn.entity.Result;
+import com.offcn.pojo.TbTypeTemplate;
+import com.offcn.sellergoods.service.TypeTemplateService;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/typeTemplate")
+public class TypeTemplateController {
+
+	@Reference(timeout = 30000)
+	private TypeTemplateService typeTemplateService;
+
+
+	//findAll
+	@RequestMapping("/findAll")
+	public List<TbTypeTemplate> findAll(){			
+		return typeTemplateService.findAll();
+	}
+	
+	
+	//findPage
+	@RequestMapping("/findPage")
+	public PageResult  findPage(int page,int rows){			
+		return typeTemplateService.findPage(page, rows);
+	}
+	
+	//add
+	@RequestMapping("/add")
+	public Result add(@RequestBody TbTypeTemplate typeTemplate){
+		try {
+			typeTemplateService.add(typeTemplate);
+			return new Result(true, "增加成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "增加失败");
+		}
+	}
+	
+	//update
+	@RequestMapping("/update")
+	public Result update(@RequestBody TbTypeTemplate typeTemplate){
+		try {
+			typeTemplateService.update(typeTemplate);
+			return new Result(true, "修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "修改失败");
+		}
+	}	
+	
+	//findOne
+	@RequestMapping("/findOne")
+	public TbTypeTemplate findOne(Long id){
+		return typeTemplateService.findOne(id);		
+	}
+	
+	//delete
+	@RequestMapping("/delete")
+	public Result delete(Long [] ids){
+		try {
+			typeTemplateService.delete(ids);
+			return new Result(true, "删除成功"); 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "删除失败");
+		}
+	}
+	
+	//条件、模糊查询+分页
+	@RequestMapping("/search")
+	public PageResult search(@RequestBody TbTypeTemplate typeTemplate, int page, int rows  ){
+		return typeTemplateService.findPage(typeTemplate, page, rows);		
+	}
+
+	@RequestMapping("/findSpecList")
+	public List<Map> findSpecList(Long id){
+		return typeTemplateService.findSpecList(id);
+	}
+	
+}
